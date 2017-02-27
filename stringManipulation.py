@@ -1,3 +1,5 @@
+from listTools import ListContainsItem
+
 def SplitIntoWords(inputString):
     """Split a string into a list of all the words seperated by whitespace"""
     return inputString.split(" ")
@@ -8,7 +10,6 @@ def RemoveUppercase(word):
 
 def RemovePunctuation(word):
     """Remove punctation characters from the start and the end of a word"""
-    # TODO: Refactor checking into a single function
     result = word
 
     startPunctuationChars = ['(', '{', '[']
@@ -17,18 +18,10 @@ def RemovePunctuation(word):
     firstChar = word[0]
     lastChar = word[len(word) - 1]
 
-    removeFirstChar = False
-    removeLastChar = False
-
-    # Check if the first character is a restricted character
-    for char in startPunctuationChars:
-        if char == firstChar:
-            removeFirstChar = True
-
-    # Check if the last character is a restricted character
-    for char in endPunctauationChars:
-        if char == lastChar:
-            removeLastChar = True
+    # If the list of restricted punctuation characters contains the first characters
+    # this sets the boolean to true, otherwise false
+    removeFirstChar = ListContainsItem(startPunctuationChars, firstChar)
+    removeLastChar = ListContainsItem(endPunctauationChars, lastChar)
 
     # Remove the first character
     if removeFirstChar:
