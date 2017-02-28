@@ -1,4 +1,5 @@
 import stringManipulation
+from baseConversion import increment
 
 def CountWordOccurences(wordArray):
     """Returns a dictionary containing each word in the array and how often it occurs"""
@@ -42,14 +43,31 @@ def ShouldCompressWord(word, occurences):
 
 def CreateDictOfCodeAndWord(wordsWithOccurrencesDict):
     codeAndWordDict = {}
-    counter = "00"
 
-    for word, occurrence in wordsWithOccurrencesDict:
+    counter = "00"
+    chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+
+    for word, occurrence in wordsWithOccurrencesDict.items():
         if ShouldCompressWord(word, occurrence):
             codeAndWordDict[counter] = word
-            # Todo: increment counter
+
+            # Increment the counter by one
+            counter = increment(counter, chars)
+            # If the length is 1 there should be another 0 in front
+            # This is because keys are expected to have a length of 2
+            if len(counter) == 1:
+                counter = "0" + counter
 
     return codeAndWordDict
+
+def GenerateDictionaryString(inputDict):
+    resultString = ""
+
+    for key, word in inputDict.items():
+        resultString += key + word + '\n'
+
+    return resultString
 
 def Compress(inputFilePath, outputFilePath):
     originalText = FilePathIntoString(inputFilePath)
@@ -57,13 +75,13 @@ def Compress(inputFilePath, outputFilePath):
     processedSlicedWords = ConvertWordsInArrayToBaseWords(slicedWords)
     wordsWithOccurences = CountWordOccurences(processedSlicedWords)
 
-    dictOfCompressedWords = {}
-
-
+    dictOfCompressedWords = CreateDictOfCodeAndWord(wordsWithOccurences)
+    dictString = GenerateDictionaryString(dictOfCompressedWords)
     print(wordsWithOccurences)
+    print(dictString)
 
 def Main():
-    Compress("testFiles/smalltext.txt", "output.txt")
+    Compress("testFiles/mobydick.txt", "output.txt")
 
 if __name__ == "__main__":
     Main()
