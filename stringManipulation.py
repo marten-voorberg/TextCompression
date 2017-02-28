@@ -13,7 +13,7 @@ def RemovePunctuation(word):
     result = word
 
     startPunctuationChars = ['(', '{', '[']
-    endPunctauationChars = [')', '}', ']', '.', ',', '?', '!', '*']
+    endPunctuationChars = [')', '}', ']', '.', ',', '?', '!', '*']
 
     firstChar = word[0]
     lastChar = word[len(word) - 1]
@@ -21,7 +21,7 @@ def RemovePunctuation(word):
     # If the list of restricted punctuation characters contains the first characters
     # this sets the boolean to true, otherwise false
     removeFirstChar = ListContainsItem(startPunctuationChars, firstChar)
-    removeLastChar = ListContainsItem(endPunctauationChars, lastChar)
+    removeLastChar = ListContainsItem(endPunctuationChars, lastChar)
 
     # Remove the first character
     if removeFirstChar:
