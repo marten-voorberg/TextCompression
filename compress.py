@@ -77,8 +77,27 @@ def Compress(inputFilePath, outputFilePath):
 
     dictOfCompressedWords = CreateDictOfCodeAndWord(wordsWithOccurences)
     dictString = GenerateDictionaryString(dictOfCompressedWords)
-    print(wordsWithOccurences)
-    print(dictString)
+
+    # Replace the word in the original text with the code
+    print(slicedWords)
+    for i in range(0, len(slicedWords)):
+        curword = slicedWords[i]
+        processedWord = stringManipulation.RemovePunctuation(stringManipulation.RemoveUppercase(curword))
+        for key, word in dictOfCompressedWords.items():
+            if word == curword:
+                slicedWords[i] = key
+                # if curword[0] == curword[0].upper():
+                #     slicedWords[i] = '!' + key
+                # else:
+                #     slicedWords[i] = key
+
+    res = ""
+    for word in slicedWords:
+        res += word + ' '
+    print(res)
+
+    # print(wordsWithOccurences)
+    # print(dictString)
 
 def Main():
     Compress("testFiles/mobydick.txt", "output.txt")
