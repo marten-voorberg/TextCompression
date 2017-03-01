@@ -69,6 +69,50 @@ def GenerateDictionaryString(inputDict):
 
     return resultString
 
+def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
+    # TODO: Write tests for this function
+    for i in range(0, len(slicedWords)):
+        curWord = slicedWords[i]
+
+        startCharIsPunctuationChar = CharAtPosIsPunctuationChar(curWord, 0)
+        endCharIsPunctuationChar = CharAtPosIsPunctuationChar(curWord, len(curWord) - 1)
+        startPunctuationChar = ""
+        endPunctuationChar = ""
+
+        if startCharIsPunctuationChar:
+            firstPunctuationChar = curWord[0]
+
+        if endCharIsPunctuationChar:
+            endPunctuationChar = curWord[len(curWord) - 1]
+
+        processedWord = stringManipulation.RemovePunctuation(stringManipulation.RemoveUppercase(curWord))
+
+        for key, value in dictOfCompressedWords.items():
+            if processedWord == value:
+                slicedWords[i] = startPunctuationChar + key + endPunctuationChar
+                if WordStartWithUppercase(curWord):
+                    slicedWords[i] = '!' + slicedWords[i]
+
+    return slicedWords
+
+def CharAtPosIsPunctuationChar(word, pos):
+    if len(word) == 0:
+        return False
+
+    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
+    for punctuaionChar in punctuationChars:
+        if punctuaionChar == word[pos]:
+            return True
+
+    return False
+
+def WordStartWithUppercase(word):
+    if len(word) == 0:
+        return False
+
+    firstChar = word[0]
+    return word[0] == word[0].upper()
+
 def Compress(inputFilePath, outputFilePath):
     originalText = FilePathIntoString(inputFilePath)
     slicedWords = stringManipulation.SplitIntoWords(originalText)

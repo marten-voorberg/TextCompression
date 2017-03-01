@@ -1,6 +1,6 @@
 import unittest
 from baseConversion import convert_base_to_dec
-from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString
+from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar
 
 class TestCountWordOccurences(unittest.TestCase):
     def testSmallDictionaryWithOnlyOneOccurences(self):
@@ -103,3 +103,27 @@ class TestGenerateDictionaryString(unittest.TestCase):
                         "00" in GenerateDictionaryString(input) and
                         "01" in GenerateDictionaryString(input)
                         )
+
+class TestWordStartWithUppercase(unittest.TestCase):
+    def testEmptyString(self):
+        self.assertFalse(WordStartWithUppercase(""))
+
+    def testUppercase(self):
+        self.assertTrue(WordStartWithUppercase("Word"))
+
+    def testLowercase(self):
+        self.assertFalse(WordStartWithUppercase("word"))
+
+class TestCharAtPosIsPunctuationChar(unittest.TestCase):
+    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
+
+    def testEmptyString(self):
+        self.assertFalse(CharAtPosIsPunctuationChar("", 0))
+
+    def testPunctationChar(self):
+        for char in self.punctuationChars:
+            string = "wo" + char + "rd"
+            self.assertTrue(CharAtPosIsPunctuationChar(string, 2))
+
+    def testNoPunctuationChar(self):
+        self.assertFalse(CharAtPosIsPunctuationChar("nopunctuation", 5))
