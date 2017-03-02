@@ -13,15 +13,6 @@ class TestCountWordOccurences(unittest.TestCase):
         expectedDict = { "the": 1, "quick": 2, "brown": 3 }
         self.assertEqual(CountWordOccurences(wordArray), expectedDict)
 
-class TestFilePathIntoString(unittest.TestCase):
-    def testNormalFile(self):
-        expectedString = "This is a sentence."
-        self.assertEqual(FilePathIntoString("testFiles/smallText.txt"), expectedString)
-
-    # Todo: fix this test
-    # def testNonExistentFile(self):
-    #    self.failUnlessRaises(IOError, FilePathIntoString("non-existent-file-path"))
-
 class TestConvertWordsInArrayToBaseWords(unittest.TestCase):
     def testOnlyPunctuation(self):
         inputArray = ["word.", "(santa)", "john"]
@@ -93,14 +84,15 @@ class TestCreateDictOfCodeAndWordDictValues(unittest.TestCase):
 
 class TestGenerateDictionaryString(unittest.TestCase):
     def testEmpty(self):
-        self.assertEqual(GenerateDictionaryString({}), "")
+        self.assertEqual(GenerateDictionaryString({}), "|END_OF_DICTIONARY|\n")
 
     def testNonEmpty(self):
         input = {'00': 'longword', '01': 'extremelylongword'}
         self.assertTrue("longword" in GenerateDictionaryString(input) and
                         "extremelylongword" in GenerateDictionaryString(input) and
                         "00" in GenerateDictionaryString(input) and
-                        "01" in GenerateDictionaryString(input)
+                        "01" in GenerateDictionaryString(input) and
+                        "|END_OF_DICTIONARY|\n" in GenerateDictionaryString(input)
                         )
 
 class TestWordStartWithUppercase(unittest.TestCase):

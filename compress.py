@@ -1,5 +1,6 @@
-import stringManipulation
+import stringManipulation, sys
 from baseConversion import increment
+from fileTools import FilePathIntoString, WriteToFile
 
 def CountWordOccurences(wordArray):
     """Returns a dictionary containing each word in the array and how often it occurs"""
@@ -12,10 +13,6 @@ def CountWordOccurences(wordArray):
             dict[word] += 1
 
     return dict
-
-def FilePathIntoString(filePath):
-    with open(filePath, 'r') as file:
-        return file.read()
 
 def ConvertWordsInArrayToBaseWords(wordArray):
     """
@@ -66,6 +63,8 @@ def GenerateDictionaryString(inputDict):
 
     for key, word in inputDict.items():
         resultString += key + word + '\n'
+
+    resultString += "|END_OF_DICTIONARY|\n"
 
     return resultString
 
@@ -125,6 +124,7 @@ def WordArrayToString(wordArray, separatorChar = " "):
     return resultString
 
 def Compress(inputFilePath, outputFilePath):
+    # TODO: Add test for tests for this function
     originalText = FilePathIntoString(inputFilePath)
     slicedWords = stringManipulation.SplitIntoWords(originalText)
     processedSlicedWords = ConvertWordsInArrayToBaseWords(slicedWords)
@@ -133,14 +133,15 @@ def Compress(inputFilePath, outputFilePath):
     dictOfCompressedWords = CreateDictOfCodeAndWord(wordsWithOccurences)
     dictString = GenerateDictionaryString(dictOfCompressedWords)
 
-    compressedWordsArray = ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords)
+    compressedWordsArray = ReplaceWordsWithCodes(stringManipulation.SplitIntoWords(originalText), dictOfCompressedWords)
     outputString = dictString + WordArrayToString(compressedWordsArray)
-    print(outputString)
 
-    # TODO: Write outputString to the outputFilePath
+    WriteToFile(outputFilePath, outputString)
 
 def Main():
-    Compress("testFiles/mobydick.txt", "output.txt")
+    inputFilePath = sys.argv[1]
+    outputFilePath = sys.argv[2]
+    Compress(inputFilePath, outputFilePath)
 
 if __name__ == "__main__":
     Main()
