@@ -1,7 +1,6 @@
 import unittest
 from listTools import ListContainsItem
 
-
 class TestListContainsItem(unittest.TestCase):
     def testIntInListOfInts(self):
         list = [2, 4, 6]

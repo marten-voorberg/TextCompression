@@ -1,6 +1,6 @@
 import unittest
 from baseConversion import convert_base_to_dec
-from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar
+from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar, ReplaceWordsWithCodes
 
 class TestCountWordOccurences(unittest.TestCase):
     def testSmallDictionaryWithOnlyOneOccurences(self):
@@ -127,3 +127,37 @@ class TestCharAtPosIsPunctuationChar(unittest.TestCase):
 
     def testNoPunctuationChar(self):
         self.assertFalse(CharAtPosIsPunctuationChar("nopunctuation", 5))
+
+class TestReplaceWordsWithCodes(unittest.TestCase):
+    def testEmpty(self):
+        self.assertEqual(ReplaceWordsWithCodes([], {}), [])
+
+    def testNoMatches(self):
+        inputArray = ["This", "is", "a", "sentence."]
+        dictionary = {}
+        expectedOutput = inputArray
+        self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)
+
+    def testNoUppercasePunctuation(self):
+        inputArray = ["this", "is", "a", "sentence"]
+        dictionary = {"00": "sentence", "01": "this"}
+        expectedOutput = ["|01", "is", "a", "|00"]
+        self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)
+
+    def testUppercase(self):
+        inputArray = ["This", "is", "a", "sentence"]
+        dictionary = {"00": "this"}
+        expectedOutput = ["|!00", "is", "a", "sentence"]
+        self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)
+
+    def testPunctuation(self):
+        inputArray = ["(this)", "is", "a", "sentence."]
+        dictionary = {"00": "sentence", "01": "this"}
+        expectedOutput = ["(|01)", "is", "a", "|00."]
+        self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)
+
+    def testPunctuationAndUppercase(self):
+        inputArray = ["(This)", "is", "a", "sentence."]
+        dictionary = {"00": "sentence", "01": "this"}
+        expectedOutput = ["(|!01)", "is", "a", "|00."]
+        self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)

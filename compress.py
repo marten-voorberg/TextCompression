@@ -70,7 +70,6 @@ def GenerateDictionaryString(inputDict):
     return resultString
 
 def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
-    # TODO: Write tests for this function
     for i in range(0, len(slicedWords)):
         curWord = slicedWords[i]
 
@@ -80,7 +79,7 @@ def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
         endPunctuationChar = ""
 
         if startCharIsPunctuationChar:
-            firstPunctuationChar = curWord[0]
+            startPunctuationChar = curWord[0]
 
         if endCharIsPunctuationChar:
             endPunctuationChar = curWord[len(curWord) - 1]
@@ -89,9 +88,10 @@ def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
 
         for key, value in dictOfCompressedWords.items():
             if processedWord == value:
-                slicedWords[i] = startPunctuationChar + key + endPunctuationChar
-                if WordStartWithUppercase(curWord):
-                    slicedWords[i] = '!' + slicedWords[i]
+                prefaceChar = "|"
+                if WordStartWithUppercase(stringManipulation.RemovePunctuation(curWord)):
+                    prefaceChar += '!'
+                slicedWords[i] = startPunctuationChar + prefaceChar + key + endPunctuationChar
 
     return slicedWords
 
