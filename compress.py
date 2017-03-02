@@ -1,4 +1,5 @@
 import stringManipulation, sys
+from stringManipulation import CharAtPosIsPunctuationChar
 from baseConversion import increment
 from fileTools import FilePathIntoString, WriteToFile
 
@@ -94,17 +95,6 @@ def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
 
     return slicedWords
 
-def CharAtPosIsPunctuationChar(word, pos):
-    if len(word) == 0:
-        return False
-
-    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
-    for punctuaionChar in punctuationChars:
-        if punctuaionChar == word[pos]:
-            return True
-
-    return False
-
 def WordStartWithUppercase(word):
     if len(word) == 0:
         return False
@@ -142,6 +132,16 @@ def Main():
     inputFilePath = sys.argv[1]
     outputFilePath = sys.argv[2]
     Compress(inputFilePath, outputFilePath)
+
+    before = len(FilePathIntoString(inputFilePath))
+    after  = len(FilePathIntoString(outputFilePath))
+    percentage = ( (after - before) / before ) * 100
+
+    print(before)
+    print(after)
+    print(percentage)
+
+
 
 if __name__ == "__main__":
     Main()

@@ -105,20 +105,6 @@ class TestWordStartWithUppercase(unittest.TestCase):
     def testLowercase(self):
         self.assertFalse(WordStartWithUppercase("word"))
 
-class TestCharAtPosIsPunctuationChar(unittest.TestCase):
-    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
-
-    def testEmptyString(self):
-        self.assertFalse(CharAtPosIsPunctuationChar("", 0))
-
-    def testPunctationChar(self):
-        for char in self.punctuationChars:
-            string = "wo" + char + "rd"
-            self.assertTrue(CharAtPosIsPunctuationChar(string, 2))
-
-    def testNoPunctuationChar(self):
-        self.assertFalse(CharAtPosIsPunctuationChar("nopunctuation", 5))
-
 class TestReplaceWordsWithCodes(unittest.TestCase):
     def testEmpty(self):
         self.assertEqual(ReplaceWordsWithCodes([], {}), [])

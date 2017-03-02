@@ -32,3 +32,14 @@ def RemovePunctuation(word):
         result = result[:-1]
 
     return result
+
+def CharAtPosIsPunctuationChar(word, pos):
+    if len(word) == 0:
+        return False
+
+    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
+    for punctuaionChar in punctuationChars:
+        if punctuaionChar == word[pos]:
+            return True
+
+    return False

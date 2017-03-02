@@ -1,5 +1,6 @@
 import unittest
 import stringManipulation
+from stringManipulation import *
 
 class TestSplitIntoWords(unittest.TestCase):
     def testGeneric(self):
@@ -32,3 +33,17 @@ class TestRemovePunctuation(unittest.TestCase):
 
     def testFirstAndLastCharPunctuation(self):
         self.assertEqual(stringManipulation.RemovePunctuation("(marten)"), "marten")
+
+class TestCharAtPosIsPunctuationChar(unittest.TestCase):
+    punctuationChars = ['(', '{', '[', ')', '}', ']', '.', ',', '?', '!', '*']
+
+    def testEmptyString(self):
+        self.assertFalse(CharAtPosIsPunctuationChar("", 0))
+
+    def testPunctationChar(self):
+        for char in self.punctuationChars:
+            string = "wo" + char + "rd"
+            self.assertTrue(CharAtPosIsPunctuationChar(string, 2))
+
+    def testNoPunctuationChar(self):
+        self.assertFalse(CharAtPosIsPunctuationChar("nopunctuation", 5))
