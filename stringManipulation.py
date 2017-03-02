@@ -20,15 +20,15 @@ def RemovePunctuation(word):
 
     # If the list of restricted punctuation characters contains the first characters
     # this sets the boolean to true, otherwise false
-    removeFirstChar = ListContainsItem(startPunctuationChars, firstChar)
-    removeLastChar = ListContainsItem(endPunctuationChars, lastChar)
+    shouldRemoveFirstChar = ListContainsItem(startPunctuationChars, firstChar)
+    shouldRemoveLastChar = ListContainsItem(endPunctuationChars, lastChar)
 
     # Remove the first character
-    if removeFirstChar:
+    if shouldRemoveFirstChar:
         result = result[1:]
 
     # Remove the last character
-    if removeLastChar:
+    if shouldRemoveLastChar:
         result = result[:-1]
 
     return result

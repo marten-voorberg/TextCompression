@@ -1,6 +1,6 @@
 import unittest
 from baseConversion import convert_base_to_dec
-from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar, ReplaceWordsWithCodes
+from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar, ReplaceWordsWithCodes, WordArrayToString
 
 class TestCountWordOccurences(unittest.TestCase):
     def testSmallDictionaryWithOnlyOneOccurences(self):
@@ -62,7 +62,6 @@ class TestShouldCompressWord(unittest.TestCase):
         self.assertTrue(ShouldCompressWord("longword", 10))
 
 class TestCreateDictOfCodeAndWordDictValues(unittest.TestCase):
-    # Todo: test if the keys are incrementing and starting at 0
     def testOneOccurence(self):
         input = {'word': 1}
         self.assertEqual(CreateDictOfCodeAndWord(input), {})
@@ -161,3 +160,17 @@ class TestReplaceWordsWithCodes(unittest.TestCase):
         dictionary = {"00": "sentence", "01": "this"}
         expectedOutput = ["(|!01)", "is", "a", "|00."]
         self.assertEqual(ReplaceWordsWithCodes(inputArray, dictionary), expectedOutput)
+
+class TestWordArrayToString(unittest.TestCase):
+    def testEmpty(self):
+        self.assertEqual(WordArrayToString([]), "")
+
+    def testDefaultSeperator(self):
+        wordArray = ["This", "is", "a", "sentence."]
+        expectedOutput = "This is a sentence."
+        self.assertEqual(WordArrayToString(wordArray), expectedOutput)
+
+    def testOtherSeparator(self):
+        wordArray = ["This", "is", "a", "sentence."]
+        expectedOutput = "This-is-a-sentence."
+        self.assertEqual(WordArrayToString(wordArray, "-"), expectedOutput)

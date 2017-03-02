@@ -113,6 +113,17 @@ def WordStartWithUppercase(word):
     firstChar = word[0]
     return word[0] == word[0].upper()
 
+def WordArrayToString(wordArray, separatorChar = " "):
+    # Todo: Write tests
+    resultString = ""
+    for word in wordArray:
+        resultString += word + separatorChar
+
+    # Remove last character because it a separatorChar which shouldn't be there
+    resultString = resultString[:-1]
+
+    return resultString
+
 def Compress(inputFilePath, outputFilePath):
     originalText = FilePathIntoString(inputFilePath)
     slicedWords = stringManipulation.SplitIntoWords(originalText)
@@ -122,26 +133,11 @@ def Compress(inputFilePath, outputFilePath):
     dictOfCompressedWords = CreateDictOfCodeAndWord(wordsWithOccurences)
     dictString = GenerateDictionaryString(dictOfCompressedWords)
 
-    # Replace the word in the original text with the code
-    print(slicedWords)
-    for i in range(0, len(slicedWords)):
-        curword = slicedWords[i]
-        processedWord = stringManipulation.RemovePunctuation(stringManipulation.RemoveUppercase(curword))
-        for key, word in dictOfCompressedWords.items():
-            if word == curword:
-                slicedWords[i] = key
-                # if curword[0] == curword[0].upper():
-                #     slicedWords[i] = '!' + key
-                # else:
-                #     slicedWords[i] = key
+    compressedWordsArray = ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords)
+    outputString = dictString + WordArrayToString(compressedWordsArray)
+    print(outputString)
 
-    res = ""
-    for word in slicedWords:
-        res += word + ' '
-    print(res)
-
-    # print(wordsWithOccurences)
-    # print(dictString)
+    # TODO: Write outputString to the outputFilePath
 
 def Main():
     Compress("testFiles/mobydick.txt", "output.txt")
