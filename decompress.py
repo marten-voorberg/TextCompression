@@ -1,6 +1,28 @@
 from fileTools import FilePathIntoString
-from stringManipulation import CharAtPosIsPunctuationChar
+from stringManipulation import CharAtPosIsPunctuationChar, FirstCharIsPunctuationChar, SplitIntoWords
+from compress import WordArrayToString
 
+def IsKey(possibleKey):
+    if FirstCharIsPunctuationChar(possibleKey):
+        return possibleKey[1] == '|'
+    else:
+        return possibleKey[0] == '|'
+
+def ExtractKey(keyString):
+    if FirstCharIsPunctuationChar(keyString):
+        return keyString[2:4]
+    elif ShouldCapitalizeKey(keyString):
+        return keyString[2:4]
+    elif ShouldCapitalizeKey(keyString) and FirstCharIsPunctuationChar(keyString):
+        return keyString[3:5]
+    else:
+        return keyString[1:3]
+
+def ShouldCapitalizeKey(keyString):
+    if FirstCharIsPunctuationChar(keyString):
+        return keyString[2] == "!"
+    else:
+        return keyString[1] == "!"
 
 def ExtractTextDictionaryFromString(string):
     dictionary = {}
@@ -34,11 +56,37 @@ def ConvertCodeToOriginalWord(inputKey, dictionary):
 def Decompress(inputFilePath, outputFilePath):
     compressedString = FilePathIntoString(inputFilePath)
     dictionary = ExtractTextDictionaryFromString(compressedString)
-    print(dictionary)
+
+    compressedWords = SplitIntoWords(compressedString)
+
+    # Remove the dictionary from the first word
+    firstWord = compressedWords[0]
+    firstWordArray = firstWord.split("\n")
+    compressedWords[0] = firstWordArray[len(firstWordArray) - 1]
+
+    # Uncompress Words
+    # TODO: Fix uncompressing of words
+    for i in range(0, len(compressedWords)):
+        word = compressedWords[i]
+        if IsKey(word):
+            shouldCapitalize = ShouldCapitalizeKey(word)
+            extractedKey = ExtractKey(word)
+            print(word)
+            print(extractedKey)
+            if ShouldCapitalizeKey(word):
+                uncompressedWord = word.replace(extractedKey, dictionary[extractedKey]).upper()
+            else:
+                uncompressedWord = word.replace(extractedKey, dictionary[extractedKey])
+
+            uncompressedWord.replace("|", "")
+            compressedWords[i] = uncompressedWord
+
+    outputString = WordArrayToString(compressedWords)
+    print(outputString)
 
 def Main():
-    # Decompress("tempIn.txt", "tempOut.txt")
-    ConvertCodeToOriginalWord("")
+    Decompress("tempIn.txt", "tempOut.txt")
+    # ConvertCodeToOriginalWord("")
 
 if __name__ == "__main__":
     Main()

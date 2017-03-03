@@ -43,3 +43,9 @@ def CharAtPosIsPunctuationChar(word, pos):
             return True
 
     return False
+
+def FirstCharIsPunctuationChar(word):
+    return CharAtPosIsPunctuationChar(word, 0)
+
+def LastCharIsPunctuationChar(word):
+    return CharAtPosIsPunctuationChar(word, len(word) - 1)
