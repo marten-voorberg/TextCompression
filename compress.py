@@ -60,16 +60,20 @@ def CreateDictOfCodeAndWord(wordsWithOccurrencesDict):
     return codeAndWordDict
 
 def GenerateDictionaryString(inputDict):
+    """Return a string extracted from a dictionary"""
     resultString = ""
 
     for key, word in inputDict.items():
         resultString += key + word + '\n'
 
+    # When decompressing we need to know when the dictionary ends
+    # We use this string to mark the end of the dictionary
     resultString += "|END_OF_DICTIONARY|\n"
 
     return resultString
 
 def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
+    """Return a array where the words that should be compressed have been replaced by the matching code"""
     for i in range(0, len(slicedWords)):
         curWord = slicedWords[i]
 
@@ -96,13 +100,15 @@ def ReplaceWordsWithCodes(slicedWords, dictOfCompressedWords):
     return slicedWords
 
 def WordStartWithUppercase(word):
+    """Return whether a word starts with uppercase letter"""
     if len(word) == 0:
         return False
 
     firstChar = word[0]
-    return word[0] == word[0].upper()
+    return firstChar == firstChar.upper()
 
 def WordArrayToString(wordArray, separatorChar = " "):
+    """Convert an array of words to a sting. The items in the array will be separated by the separator character"""
     # Todo: Write tests
     resultString = ""
     for word in wordArray:
@@ -114,7 +120,8 @@ def WordArrayToString(wordArray, separatorChar = " "):
     return resultString
 
 def Compress(inputFilePath, outputFilePath):
-    # TODO: Add test for tests for this function
+    """Compress the input file and write the compressed file to the output file"""
+    # TODO: Add test for this function
     originalText = FilePathIntoString(inputFilePath)
     slicedWords = stringManipulation.SplitIntoWords(originalText)
     processedSlicedWords = ConvertWordsInArrayToBaseWords(slicedWords)

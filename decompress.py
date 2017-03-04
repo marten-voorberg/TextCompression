@@ -4,12 +4,14 @@ from stringManipulation import CharAtPosIsPunctuationChar, FirstCharIsPunctuatio
 from compress import WordArrayToString
 
 def IsKey(possibleKey):
+    """Return if a certain string is a key. This will be marked by a '|'. Somtimes there's a punctuation character before it. The '|' will then be the 2 character"""
     if FirstCharIsPunctuationChar(possibleKey):
         return possibleKey[1] == '|'
     else:
         return possibleKey[0] == '|'
 
 def ExtractKey(keyString):
+    """Extract the key from a keyString. This is neccesary because there will always be a '|' and sometimes a '!' or punctuation character."""
     if ShouldCapitalizeKey(keyString) and FirstCharIsPunctuationChar(keyString):
         return keyString[3:5]
     elif ShouldCapitalizeKey(keyString):
@@ -20,6 +22,7 @@ def ExtractKey(keyString):
         return keyString[1:3]
 
 def ShouldCapitalizeKey(keyString):
+    """Return if the word that this key resembles should be uppercase. This is marked by a '!' after the '|'"""
     if FirstCharIsPunctuationChar(keyString):
         return keyString[2] == "!"
     else:
@@ -28,33 +31,20 @@ def ShouldCapitalizeKey(keyString):
 def ExtractTextDictionaryFromString(string):
     dictionary = {}
     lines = string.split('\n')
+
+    # Keep adding to the dictionary until we hit the end of the dictionary marked by the end of dictionary line
     for line in lines:
         if line == "|END_OF_DICTIONARY|":
             return dictionary
 
         # The first two characters of the line will be the key
         # The remaining characters will be the word
-        dictionary[line[0:2]] = line[2:]
-
-def ConvertCodeToOriginalWord(inputKey, dictionary):
-    actualKey = inputKey
-
-    # Check if the first and last char is a punctuation character
-    firstCharIsPunctuation = CharAtPosIsPunctuationChar(inputKey, 0)
-    lastCharIsPunctuation = CharAtPosIsPunctuationChar(inputKey, len(inputKey) - 1)
-    startPuncChar = ""
-    endPuncChar = ""
-    if firstCharIsPunctuation:
-        startPuncChar = inputKey[0]
-        actualKey = inputKey[1:]
-
-    if lastCharIsPunctuation:
-        endPuncChar = inputKey[len(inputKey) - 1]
-        actualKey = inputKey[:-1]
-
-    print(actualKey)
+        key = line[0:2]
+        word = line[2:]
+        dictionary[key] = word
 
 def UncompressWordArray(compressedWords, dictionary):
+    """Returns a wordArray where the compressedWords have been replaced by the uncompressedWords"""
     for i in range(0, len(compressedWords)):
         curWord = compressedWords[i]
         if IsKey(curWord):
@@ -72,6 +62,8 @@ def UncompressWordArray(compressedWords, dictionary):
     return compressedWords
 
 def Decompress(inputFilePath, outputFilePath):
+    """Decompress the input file and write the result to the output file"""
+    # TODO: Add tests for this function
     compressedString = FilePathIntoString(inputFilePath)
     dictionary = ExtractTextDictionaryFromString(compressedString)
 
