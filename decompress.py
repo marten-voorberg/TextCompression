@@ -1,3 +1,4 @@
+import sys
 from fileTools import FilePathIntoString, WriteToFile
 from stringManipulation import CharAtPosIsPunctuationChar, FirstCharIsPunctuationChar, SplitIntoWords
 from compress import WordArrayToString
@@ -86,7 +87,10 @@ def Decompress(inputFilePath, outputFilePath):
     WriteToFile(outputFilePath, outputString)
 
 def Main():
-    Decompress("testFiles/ipsumOut.txt", "testFiles/ipsumOutOut.txt")
+    inputFilePath = sys.argv[1]
+    outputFilePath = sys.argv[2]
+    Decompress(inputFilePath, outputFilePath)
+
 
 if __name__ == "__main__":
     Main()
