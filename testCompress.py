@@ -1,14 +1,15 @@
 import unittest
 from baseConversion import convert_base_to_dec
-from compress import CountWordOccurences, FilePathIntoString, ConvertWordsInArrayToBaseWords, CalculateCostOfCompressing, ShouldCompressWord, CreateDictOfCodeAndWord, GenerateDictionaryString, WordStartWithUppercase, CharAtPosIsPunctuationChar, ReplaceWordsWithCodes, WordArrayToString
+from compress import *
+from fileTools import WriteToFile, FilePathIntoString, DeleteFileContent
 
-class TestCountWordOccurences(unittest.TestCase):
-    def testSmallDictionaryWithOnlyOneOccurences(self):
+class TestCountWordOccurrences(unittest.TestCase):
+    def testSmallDictionaryWithOnlyOneOccurrences(self):
         wordArray = ["the", "quick", "brown"]
         expectedDict = { "the": 1, "quick": 1, "brown": 1 }
         self.assertEqual(CountWordOccurences(wordArray), expectedDict)
 
-    def testSmallDictionaryWithMultipleOccurences(self):
+    def testSmallDictionaryWithMultipleOccurrences(self):
         wordArray = ["the", "quick", "brown", "quick", "brown", "brown"]
         expectedDict = { "the": 1, "quick": 2, "brown": 3 }
         self.assertEqual(CountWordOccurences(wordArray), expectedDict)
@@ -152,3 +153,33 @@ class TestWordArrayToString(unittest.TestCase):
         wordArray = ["This", "is", "a", "sentence."]
         expectedOutput = "This-is-a-sentence."
         self.assertEqual(WordArrayToString(wordArray, "-"), expectedOutput)
+
+class TestCompressF(unittest.TestCase):
+    endOfDictString = "|END_OF_DICTIONARY|\n"
+    pathToFolder = "testFiles/compress/"
+
+    def testNoCompression(self):
+        inputFile = self.pathToFolder + "noCompressionInput.txt"
+        outputFile = self.pathToFolder + "noCompressionOutput.txt"
+
+        input = "This is a sentence."
+        expectedOutput = self.endOfDictString + "This is a sentence."
+
+        WriteToFile(inputFile, input)
+        Compress(inputFile, outputFile)
+        actualOutput = FilePathIntoString(outputFile)
+        DeleteFileContent(outputFile)
+        self.assertEqual(actualOutput, expectedOutput)
+
+    def testNormal(self):
+        inputFile = self.pathToFolder + "normalInput.txt"
+        outputFile = self.pathToFolder + "normalOutput.txt"
+
+        input = "This sentence contains the word sentence a bunch of time sentence, sentence, Sentence."
+        expectedOutput = "00sentence\n" + self.endOfDictString + "This |00 contains the word |00 a bunch of time |00, |00, |!00."
+
+        WriteToFile(inputFile, input)
+        Compress(inputFile, outputFile)
+        actualOutput = FilePathIntoString(outputFile)
+        DeleteFileContent(outputFile)
+        self.assertEqual(actualOutput, expectedOutput)

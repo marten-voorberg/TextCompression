@@ -1,0 +1,2 @@
+|END_OF_DICTIONARY|
+This is some normal uncompressed text.

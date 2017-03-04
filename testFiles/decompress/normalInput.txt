@@ -1,0 +1,3 @@
+00sentence
+|END_OF_DICTIONARY|
+This is a |!00.

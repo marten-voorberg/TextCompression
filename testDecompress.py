@@ -1,5 +1,6 @@
 import unittest
 from decompress import *
+from fileTools import WriteToFile, FilePathIntoString, DeleteFileContent
 
 class TestExtractTextDictionaryFromString(unittest.TestCase):
     def testEmpty(self):
@@ -84,3 +85,34 @@ class TestUncompressWordArray(unittest.TestCase):
         dictionary = {"00": "sentence"}
         expectedOutput = ["This", "is", "a", "(Sentence)"]
         self.assertEqual(UncompressWordArray(inputArray, dictionary), expectedOutput)
+
+class TestDecompress(unittest.TestCase):
+    endOfDictString = "|END_OF_DICTIONARY|\n"
+    pathToFolder = "testFiles/decompress/"
+
+    def testNoCompression(self):
+        inputFile = self.pathToFolder + "noCompressionInput.txt"
+        outputFile = self.pathToFolder + "noCompressionOutput.txt"
+
+        input = self.endOfDictString + "This is some normal uncompressed text."
+        expectedOutput = "This is some normal uncompressed text."
+
+        WriteToFile(inputFile, input)
+        Decompress(inputFile, outputFile)
+        actualOutput = FilePathIntoString(outputFile)
+        DeleteFileContent(outputFile)
+        self.assertEqual(actualOutput, expectedOutput)
+
+    def testNormal(self):
+        inputFile = self.pathToFolder + "normalInput.txt"
+        outputFile = self.pathToFolder + "normalOutput.txt"
+
+        dictString = "00sentence\n"
+        input = dictString + self.endOfDictString + "This is a |!00."
+        expectedOutput = "This is a Sentence."
+
+        WriteToFile(inputFile, input)
+        Decompress(inputFile, outputFile)
+        actualOutput = FilePathIntoString(outputFile)
+        DeleteFileContent(outputFile)
+        self.assertEqual(actualOutput, expectedOutput)
