@@ -38,10 +38,10 @@ class TestExtractKey(unittest.TestCase):
         self.assertEqual(ExtractKey("(|01)"), "01")
 
     def testCapitalization(self):
-        self.assertEqual(ExtractKey("|01"), "01")
+        self.assertEqual(ExtractKey("|!01"), "01")
 
     def testCapitalizationAndPunctuation(self):
-        self.assertEqual(ExtractKey("(|01)"), "01")
+        self.assertEqual(ExtractKey("(|!01)"), "01")
 
 class TestShouldCapitalizeKey(unittest.TestCase):
     def testNoPunctuationTrue(self):
@@ -55,3 +55,32 @@ class TestShouldCapitalizeKey(unittest.TestCase):
 
     def testPunctuationFalse(self):
         self.assertFalse(ShouldCapitalizeKey("(|00"))
+
+class TestUncompressWordArray(unittest.TestCase):
+    def testEmptyDict(self):
+        inputArray = ["This", "is", "a", "sentence."]
+        self.assertEqual(UncompressWordArray(inputArray, {}), inputArray)
+
+    def testNoPunctuationAndCapitalization(self):
+        inputArray = ["This", "is", "a", "|00"]
+        dictionary = {"00": "sentence"}
+        expectedOutput = ["This", "is", "a", "sentence"]
+        self.assertEqual(UncompressWordArray(inputArray, dictionary), expectedOutput)
+
+    def testOnlyPunctuation(self):
+        inputArray = ["This", "is", "a", "(|00)"]
+        dictionary = {"00": "sentence"}
+        expectedOutput = ["This", "is", "a", "(sentence)"]
+        self.assertEqual(UncompressWordArray(inputArray, dictionary), expectedOutput)
+
+    def testOnlyCapitalization(self):
+        inputArray = ["This", "is", "a", "|!00"]
+        dictionary = {"00": "sentence"}
+        expectedOutput = ["This", "is", "a", "Sentence"]
+        self.assertEqual(UncompressWordArray(inputArray, dictionary), expectedOutput)
+
+    def testPunctuationAndCapitalization(self):
+        inputArray = ["This", "is", "a", "(|!00)"]
+        dictionary = {"00": "sentence"}
+        expectedOutput = ["This", "is", "a", "(Sentence)"]
+        self.assertEqual(UncompressWordArray(inputArray, dictionary), expectedOutput)
